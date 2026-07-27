@@ -1,2 +1,1 @@
-# demo-mic-product-api
-Microservicio Product API Demo
+# Microservicio Product API Demo
