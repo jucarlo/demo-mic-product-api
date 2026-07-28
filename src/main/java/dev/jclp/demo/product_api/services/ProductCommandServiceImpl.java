@@ -1,0 +1,26 @@
+package dev.jclp.demo.product_api.services;
+
+import org.springframework.cloud.stream.function.StreamBridge;
+
+
+import dev.jclp.demo.product_api.model.Command;
+import dev.jclp.demo.product_api.model.dto.ProductDto;
+import org.springframework.cloud.stream.function.StreamBridge;
+
+public class ProductCommandServiceImpl implements ProductCommandService {
+
+    private final StreamBridge streamBridge;
+
+    public ProductCommandServiceImpl(StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
+    }
+
+    @Override
+    public void sendCreate(ProductDto productDto) {
+        Command<ProductDto> command = new Command<>("CREATE", null, productDto);
+        boolean sent = streamBridge.send("commands-out-0", command);
+        if (!sent) {
+            throw new IllegalStateException("Failed sending kafka command");
+        }
+    }
+}
