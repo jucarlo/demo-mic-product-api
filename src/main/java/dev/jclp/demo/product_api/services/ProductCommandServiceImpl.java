@@ -6,7 +6,9 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import dev.jclp.demo.product_api.model.Command;
 import dev.jclp.demo.product_api.model.dto.ProductDto;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProductCommandServiceImpl implements ProductCommandService {
 
     private final StreamBridge streamBridge;
