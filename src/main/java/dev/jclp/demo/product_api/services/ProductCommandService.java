@@ -1,7 +1,10 @@
 package dev.jclp.demo.product_api.services;
 
+import dev.jclp.demo.product_api.model.Reply;
 import dev.jclp.demo.product_api.model.dto.ProductDto;
 
+import java.time.Duration;
+
 public interface ProductCommandService {
-    void sendCreate(ProductDto productDto);
+    Reply<?> sendCreateAndAwait(ProductDto productDto, Duration timeout);
 }
