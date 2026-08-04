@@ -31,9 +31,18 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Override
     public Reply<?> sendCreateAndAwait(ProductDto productDto, Duration timeout) {
         Command<ProductDto> command = new Command<>("CREATE", null, productDto);
+        return sendAndAwait(command, timeout);
+    }
 
+    @Override
+    public Reply<?> sendReadAndAwait(Long id, Duration timeout) {
+        Command<ProductDto> command = new Command<>("READ", id, null);
+        return sendAndAwait(command, timeout);
+    }
+
+    private Reply<?> sendAndAwait(Command<ProductDto> command, Duration timeout) {
         String correlationId = java.util.UUID.randomUUID().toString();
-        LOGGER.info("Sending CREATE command with correlationId: {}", correlationId);
+        LOGGER.info("Sending command with correlationId: {}", correlationId);
         CompletableFuture<Reply<?>> futureReply = replyInbox.register(correlationId);
 
         Message<Command<ProductDto>> message = MessageBuilder.withPayload(command)
@@ -49,8 +58,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             return futureReply.get(timeout.toMillis(), java.util.concurrent.TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             LOGGER.error("Failed to receive reply", e);
-            throw new RuntimeException("Failed to receive reply",e);
+            throw new RuntimeException("Failed to receive reply", e);
         }
-
     }
 }
