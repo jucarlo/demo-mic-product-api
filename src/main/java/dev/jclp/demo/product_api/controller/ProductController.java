@@ -38,6 +38,18 @@ public class ProductController {
         return getResponseEntity(reply);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody ProductDto productDto) {
+        Reply<?> reply = productCommandService.sendUpdateAndAwait(productDto, id, Duration.ofSeconds(5));
+        return getResponseEntity(reply);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Reply<?> reply = productCommandService.sendDeleteAndAwait(id, Duration.ofSeconds(5));
+        return getResponseEntity(reply);
+    }
+
     private static @NonNull ResponseEntity<?> getResponseEntity(Reply<?> reply) {
         if ("SUCCESS".equalsIgnoreCase(reply.status())) {
             return ResponseEntity.ok(reply.body());

@@ -46,6 +46,18 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return sendAndAwait(command, timeout);
     }
 
+    @Override
+    public Reply<?> sendUpdateAndAwait(ProductDto productDto, Long id, Duration timeout) {
+        Command<ProductDto> command = new Command<>("UPDATE", id, productDto);
+        return sendAndAwait(command, timeout);
+    }
+
+    @Override
+    public Reply<?> sendDeleteAndAwait(Long id, Duration timeout) {
+        Command<ProductDto> command = new Command<>("DELETE", id, null);
+        return sendAndAwait(command, timeout);
+    }
+
     private Reply<?> sendAndAwait(Command<ProductDto> command, Duration timeout) {
         String correlationId = java.util.UUID.randomUUID().toString();
         LOGGER.info("Sending command with correlationId: {}", correlationId);
