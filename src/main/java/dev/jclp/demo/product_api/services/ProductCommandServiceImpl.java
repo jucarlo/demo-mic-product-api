@@ -40,6 +40,12 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return sendAndAwait(command, timeout);
     }
 
+    @Override
+    public Reply<?> sendReadAllAndAwait(Duration timeout) {
+        Command<ProductDto> command = new Command<>("READ_ALL", null, null);
+        return sendAndAwait(command, timeout);
+    }
+
     private Reply<?> sendAndAwait(Command<ProductDto> command, Duration timeout) {
         String correlationId = java.util.UUID.randomUUID().toString();
         LOGGER.info("Sending command with correlationId: {}", correlationId);
